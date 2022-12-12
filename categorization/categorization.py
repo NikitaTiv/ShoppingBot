@@ -1,21 +1,33 @@
 import json, io
 
 
-def add_categories_to_file(input_category: io.TextIOWrapper, input_check: io.TextIOWrapper) -> None:
-    with open(input_category, "r", encoding='utf-8') as read_file:
-        categories = json.load(read_file)
-    with open(input_check, "r", encoding='utf-8') as read_file:
-        check_verified = json.load(read_file)
-    for number, good in enumerate(check_verified): #нумерация и перебор словарей в чеке от Саши
-        key_name = good.get("name", "пусто").replace(".", " ").replace(",", " ").replace("/", " ")
-        good_as_list = key_name.lower().split()
-        for category in categories:
-            for word in good_as_list:
-                if word in categories[category]:
-                    check_verified[number]["category"] = category
-    with open("verified_check_with_categories.json", "w", encoding='utf-8') as write_file:
-        json.dump(check_verified, write_file, sort_keys=False, indent=4, ensure_ascii=False)
+def read_from_json(input_file: io.TextIOWrapper) -> str:
+    with open(input_file, "r", encoding='utf-8') as read_file:
+        return json.load(read_file)
+
+
+def write_to_json(output_file: str, data_to_write: str) -> None:
+    with open(output_file, "w", encoding='utf-8') as write_file:
+        json.dump(data_to_write, write_file, sort_keys=False, indent=4, ensure_ascii=False)
+
+
+def add_categories_to_file(input_categories: str, check: str) -> str:
+    for number, good in enumerate(check):
+        if "name" in good:
+            result_category = "не определена"
+            key_name = good["name"].replace(".", " ").replace(",", " ").replace("/", " ")
+            good_as_list = key_name.lower().split()
+            for category in input_categories: 
+                for word in good_as_list:
+                    if word in input_categories[category]:
+                        result_category = category
+                        break
+            check[number]["category"] = result_category
+    return check
 
 
 if __name__ == "__main__":
-    add_categories_to_file("category.json", "verified_check.json")
+    categories = read_from_json("categories.json")
+    input_check = read_from_json("verified_check.json")
+    str_with_categories = add_categories_to_file(categories, input_check)
+    write_to_json("verified_check_with_categories.json", str_with_categories)
