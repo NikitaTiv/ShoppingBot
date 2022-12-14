@@ -1,33 +1,28 @@
-import json, io
+import json_func
+from typing import Union
 
 
-def read_from_json(input_file: io.TextIOWrapper) -> str:
-    with open(input_file, "r", encoding='utf-8') as read_file:
-        return json.load(read_file)
+def category_definition(input_categories: str, good: str) -> Union[str, None]:
+    result_category = None
+    good_without_separator = good["name"].replace(".", " ").replace(",", " ").replace("/", " ")
+    good_as_list = good_without_separator.lower().split()
+    for category in input_categories: 
+        category_set = set(input_categories[category])
+        if category_set.intersection(good_as_list):
+            result_category = category
+            break
+    return result_category
 
 
-def write_to_json(output_file: str, data_to_write: str) -> None:
-    with open(output_file, "w", encoding='utf-8') as write_file:
-        json.dump(data_to_write, write_file, sort_keys=False, indent=4, ensure_ascii=False)
-
-
-def add_categories_to_file(input_categories: str, check: str) -> str:
-    for number, good in enumerate(check):
-        if "name" in good:
-            result_category = "не определена"
-            key_name = good["name"].replace(".", " ").replace(",", " ").replace("/", " ")
-            good_as_list = key_name.lower().split()
-            for category in input_categories: 
-                for word in good_as_list:
-                    if word in input_categories[category]:
-                        result_category = category
-                        break
-            check[number]["category"] = result_category
-    return check
+def add_categories_to_receipt(input_categories: str, receipt: str) -> str:
+    for good in receipt:
+        if 'name' not in good: continue
+        good["category"] = category_definition(input_categories, good)
+    return receipt
 
 
 if __name__ == "__main__":
-    categories = read_from_json("categories.json")
-    input_check = read_from_json("verified_check.json")
-    str_with_categories = add_categories_to_file(categories, input_check)
-    write_to_json("verified_check_with_categories.json", str_with_categories)
+    categories = json_func.read("categories.json")
+    input_receipt = json_func.read("verified_receipt.json")
+    str_with_categories = add_categories_to_receipt(categories, input_receipt)
+    json_func.write("verified_receipt_with_categories.json", str_with_categories)

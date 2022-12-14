@@ -8,7 +8,7 @@ def read_qr_code(filepath: str) -> str:
         value, points, straight_qrcode = detect.detectAndDecode(img)
         return value
     except cv2.error as error:
-        print(error)
+        return error
 
 
 if __name__ == "__main__":
