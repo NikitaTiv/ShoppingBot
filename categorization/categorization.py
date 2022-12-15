@@ -3,26 +3,24 @@ sys.path.append("../utils/")
 import json_func
 
 
-def define_category(input_categories = "", good = "") -> str | None:
+def define_category(input_categories: dict, good: dict) -> str | None:
     result_category = None
     good_without_separator = good["name"].replace(".", " ").replace(",", " ").replace("/", " ")
     good_as_list = good_without_separator.lower().split()
-    for category in input_categories: 
-        category_set = set(input_categories[category])
+    tuple_categories = input_categories.items() 
+    for category in tuple_categories: 
+        category_set = set(category[1])
         if category_set.intersection(good_as_list):
-            result_category = category
+            result_category = category[0]
             break
     return result_category
 
 
-def add_categories_to_receipt(input_categories = "", receipt = "") -> str:
-    if receipt:
-        for good in receipt:
-            if 'name' not in good: 
-                continue
-            good["category"] = define_category(input_categories, good)
-        return receipt
-    receipt = "Пустой чек"
+def add_categories_to_receipt(input_categories: dict, receipt: list) -> list:
+    for good in receipt:
+        if 'name' not in good: 
+            continue
+        good["category"] = define_category(input_categories, good)
     return receipt
 
 
