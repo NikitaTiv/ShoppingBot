@@ -1,8 +1,9 @@
+import sys
+sys.path.append("../utils/")
 import json_func
-from typing import Union
 
 
-def category_definition(input_categories: str, good: str) -> Union[str, None]:
+def define_category(input_categories = "", good = "") -> str | None:
     result_category = None
     good_without_separator = good["name"].replace(".", " ").replace(",", " ").replace("/", " ")
     good_as_list = good_without_separator.lower().split()
@@ -14,10 +15,14 @@ def category_definition(input_categories: str, good: str) -> Union[str, None]:
     return result_category
 
 
-def add_categories_to_receipt(input_categories: str, receipt: str) -> str:
-    for good in receipt:
-        if 'name' not in good: continue
-        good["category"] = category_definition(input_categories, good)
+def add_categories_to_receipt(input_categories = "", receipt = "") -> str:
+    if receipt:
+        for good in receipt:
+            if 'name' not in good: 
+                continue
+            good["category"] = define_category(input_categories, good)
+        return receipt
+    receipt = "Пустой чек"
     return receipt
 
 
