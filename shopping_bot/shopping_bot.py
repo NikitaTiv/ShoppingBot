@@ -8,7 +8,7 @@ from telegram.ext import (
 
 import settings
 
-from states import (
+from handlers import (
     greet_user, main_menu, operations_with_receipt,
     add_receipt, my_receipts, check_user_photo, cancel,
 )
@@ -17,7 +17,10 @@ logging.basicConfig(filename='bot.log',
                     format='[%(asctime)s][%(levelname)s] => %(message)s',
                     level=logging.INFO)
 
-MAIN_MENU, ACTIONS_WITH_THE_RECEIPT, MENU_RECEIPT, ADD_CHECK = range(4)
+MAIN_MENU = 0
+ACTIONS_WITH_THE_RECEIPT = 1
+MENU_RECEIPT = 2
+ADD_CHECK = 3
 
 
 def main() -> None:
@@ -34,9 +37,6 @@ def main() -> None:
                 MessageHandler(Filters.regex(
                     '^(Расходы по чеку 💰)$',
                     ), operations_with_receipt),
-                MessageHandler(Filters.regex(
-                    '^(Возврат в предыдущее меню ↩️)$',
-                    ), main_menu),
             ],
             MENU_RECEIPT: [
                 MessageHandler(Filters.regex(
