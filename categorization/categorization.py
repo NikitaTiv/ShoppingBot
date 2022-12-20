@@ -1,4 +1,5 @@
 from utils import json_func
+from typing import Any
 
 
 def define_category(input_categories: dict, good: dict) -> str | None:
