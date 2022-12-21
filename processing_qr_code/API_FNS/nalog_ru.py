@@ -1,3 +1,6 @@
+"""
+This module take from https://github.com/valiotti/get-receipts.git
+"""
 import requests
 
 class NalogRuPython:
