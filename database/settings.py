@@ -1,1 +1,0 @@
-URL = "postgresql://cjpzyqur:oSZkJ8wmL8FFUG5Pn1gy1bywlsqAoslH@mel.db.elephantsql.com/cjpzyqur"
