@@ -2,6 +2,8 @@ from clarifai_grpc.channel.clarifai_channel import ClarifaiChannel
 from clarifai_grpc.grpc.api import resources_pb2, service_pb2, service_pb2_grpc
 from clarifai_grpc.grpc.api.status import status_code_pb2
 
+import logging
+
 import settings
 
 def has_check_on_image_return_bool(file_name: str) -> bool:
@@ -33,6 +35,6 @@ def check_responce_for_object_return_bool(response: service_pb2.MultiOutputRespo
             if concept.name == 'text' and concept.value >= 0.80:
                 return True
     else:
-        print(f'Ошибка распознавания: {response.outputs[0].status.details}')  # noqa:T201
+        logging.info(f'Ошибка распознавания: {response.outputs[0].status.details}')
 
     return False

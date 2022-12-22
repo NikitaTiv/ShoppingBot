@@ -17,11 +17,6 @@ logging.basicConfig(filename='bot.log',
                     format='[%(asctime)s][%(levelname)s] => %(message)s',
                     level=logging.INFO)
 
-MAIN_MENU = 0
-ACTIONS_WITH_THE_RECEIPT = 1
-MENU_RECEIPT = 2
-ADD_CHECK = 3
-
 
 def main() -> None:
     """Run the bot."""
@@ -30,15 +25,15 @@ def main() -> None:
     conv_handler = ConversationHandler(
         entry_points=[CommandHandler('start', greet_user)],
         states={
-            MAIN_MENU: [
+            settings.MAIN_MENU: [
                 MessageHandler(Filters.regex('^(Привет 👋)$'), main_menu),
             ],
-            ACTIONS_WITH_THE_RECEIPT: [
+            settings.ACTIONS_WITH_THE_RECEIPT: [
                 MessageHandler(Filters.regex(
                     '^(Расходы по чеку 💰)$',
                     ), operations_with_receipt),
             ],
-            MENU_RECEIPT: [
+            settings.MENU_RECEIPT: [
                 MessageHandler(Filters.regex(
                     '^(Добавить чек 🆕)$',
                     ), add_receipt),
@@ -47,7 +42,7 @@ def main() -> None:
                     '^(Возврат в предыдущее меню ↩️)$',
                     ), main_menu),
             ],
-            ADD_CHECK: [
+            settings.ADD_CHECK: [
                 MessageHandler(Filters.photo, check_user_photo),
                 MessageHandler(Filters.regex(
                     '^(Возврат в предыдущее меню ↩️)$',

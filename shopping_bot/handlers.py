@@ -6,14 +6,9 @@ from telegram import (
 )
 from telegram.ext import ConversationHandler, CallbackContext
 
-from utils import has_check_on_image_return_bool
+from utils.clarifai import has_check_on_image_return_bool
 
 import settings
-
-MAIN_MENU = 0
-ACTIONS_WITH_THE_RECEIPT = 1
-MENU_RECEIPT = 2
-ADD_CHECK = 3
 
 
 def greet_user(update: Update, context) -> int:
@@ -29,7 +24,7 @@ def greet_user(update: Update, context) -> int:
         ),
     )
 
-    return MAIN_MENU
+    return settings.MAIN_MENU
 
 
 def main_menu(update: Update, context) -> int:
@@ -44,7 +39,7 @@ def main_menu(update: Update, context) -> int:
         ),
     )
 
-    return ACTIONS_WITH_THE_RECEIPT
+    return settings.ACTIONS_WITH_THE_RECEIPT
 
 
 def operations_with_receipt(update: Update, context) -> int:
@@ -60,7 +55,7 @@ def operations_with_receipt(update: Update, context) -> int:
         ),
     )
 
-    return MENU_RECEIPT
+    return settings.MENU_RECEIPT
 
 
 def add_receipt(update: Update, context) -> int:
@@ -76,7 +71,7 @@ def add_receipt(update: Update, context) -> int:
             reply_keyboard, resize_keyboard=True,
         ))
 
-    return ADD_CHECK
+    return settings.ADD_CHECK
 
 
 def check_user_photo(update: Update, context: CallbackContext) -> None:
