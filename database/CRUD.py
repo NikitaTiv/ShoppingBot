@@ -1,11 +1,17 @@
 from db import db_session
-from models import User
+from models import User, Receipt
 import datetime
 
 
-def add_user_info(input_name: str, input_name_photo: str) -> None:
-    user = User(name=input_name, name_photo=input_name_photo, date_upload = datetime.datetime.now())
+def add_user(user_name: str) -> None:
+    user = User(name=user_name)
     db_session.add(user)
+    db_session.commit()
+
+
+def add_receipt(receipt_name: str, input_user_id: int) -> None:
+    receipt = Receipt(name=receipt_name, user_id=input_user_id)
+    db_session.add(receipt)
     db_session.commit()
 
 
