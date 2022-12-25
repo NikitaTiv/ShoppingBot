@@ -1,6 +1,5 @@
 from db import db_session
 from models import User, Receipt
-import datetime
 
 
 def add_user(user_name: str) -> None:
