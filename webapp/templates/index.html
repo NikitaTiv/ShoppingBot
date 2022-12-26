@@ -16,12 +16,10 @@
             <div class="row">
                 <div class="col-12">
                 {% for category in categories %}
-                <div class="checkbox">
-                    <label>
-                        <input type="checkbox">
-                        {{ category }}
-                    </label>
-                </div>
+                <form>
+                    <input type="checkbox" id={{loop.index}} name="vehicle1" value="Bike">
+                    <label for={{loop.index}}>{{ category }}</label><br>
+                </form>
                 {% endfor %} 
                 </div>
                 <style type="text/css"> 
