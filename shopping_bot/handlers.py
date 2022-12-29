@@ -115,13 +115,13 @@ def operation_phone_number(update: Update, context: CallbackContext) -> int:
         context.user_data['phone'] = value
         update.message.reply_text('Телефон сохранен.')
         phone = NalogRuPython(context.user_data.get('phone'))
-        phone.receive_code()
+        phone.sends_sms_to_the_user()
         update.message.reply_text('Пожалуйста введите код из SMS.')
 
         return settings.CODE
 
     else:
-        update.message.reply_text('Введите номер телефона в формате 89ХХХХХХХХХ.')
+        update.message.reply_text('Введите номер телефона в формате +79ХХХХХХХХХ.')
 
 
 def authorization_with_code(update: Update, context: CallbackContext) -> None:
@@ -129,8 +129,8 @@ def authorization_with_code(update: Update, context: CallbackContext) -> None:
     Принимает от пользователя код из смс и отпровляет его в налоговую.
     """
     value = update.message.text
-    phone = NalogRuPython(context.user_data.get('phone'))
-    phone.entering_code(value)
+    phone = NalogRuPython(context.user_data.get('phone'), code=value)
+    phone.entering_code()
     string_from_qr = read_qr_code(context.user_data.get('file'))
     receipt = phone.get_ticket(string_from_qr)
     phone.refresh_token_function()

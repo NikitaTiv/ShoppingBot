@@ -14,16 +14,17 @@ class NalogRuPython:
     CLIENT_SECRET = 'IyvrAbKt9h/8p6a7QPh8gpkXYQ4='
     OS = 'Android'
 
-    def __init__(self, phone_number):
-        self.__session_id = None
-        self.__phone = phone_number
+    def __init__(self, phone_number, code = 0):
+        self.session_id = None
+        self.phone = phone_number
+        self.code = code
 
 
-    def receive_code(self):
+    def sends_sms_to_the_user(self):
         """Sends a phone number, receives a code."""
         url = f'https://{self.HOST}/v2/auth/phone/request'
         payload = {
-            'phone': self.__phone,
+            'phone': self.phone,
             'client_secret': self.CLIENT_SECRET,
             'os': self.OS,
         }
@@ -40,8 +41,8 @@ class NalogRuPython:
         resp = requests.post(url, json=payload, headers=headers)
 
 
-    def entering_code(self, code):
-        """Sends a form with a code from the user."""
+    def entering_code(self):
+        """sends the code to the server, opens the session."""
         headers = {
             'Host': self.HOST,
             'Accept': self.ACCEPT,
@@ -54,23 +55,23 @@ class NalogRuPython:
 
         url = f'https://{self.HOST}/v2/auth/phone/verify'
         payload = {
-        'phone': self.__phone,
+        'phone': self.phone,
         'client_secret': self.CLIENT_SECRET,
-        'code': code,
+        'code': self.code,
         'os': self.OS,
         }
 
         resp = requests.post(url, json=payload, headers=headers)
 
-        self.__session_id = resp.json()['sessionId']
-        self.__refresh_token = resp.json()['refresh_token']
+        self.session_id = resp.json()['sessionId']
+        self.refresh_token = resp.json()['refresh_token']
 
 
     def refresh_token_function(self) -> None:
         """Refresh token."""
         url = f'https://{self.HOST}/v2/mobile/users/refresh'
         payload = {
-            'refresh_token': self.__refresh_token,
+            'refresh_token': self.refresh_token,
             'client_secret': self.CLIENT_SECRET,
         }
 
@@ -86,8 +87,8 @@ class NalogRuPython:
 
         resp = requests.post(url, json=payload, headers=headers)
 
-        self.__session_id = resp.json()['sessionId']
-        self.__refresh_token = resp.json()['refresh_token']
+        self.session_id = resp.json()['sessionId']
+        self.refresh_token = resp.json()['refresh_token']
 
     def _get_ticket_id(self, qr: str) -> str:
         """
@@ -104,7 +105,7 @@ class NalogRuPython:
             'Device-Id': self.DEVICE_ID,
             'clientVersion': self.CLIENT_VERSION,
             'Accept-Language': self.ACCEPT_LANGUAGE,
-            'sessionId': self.__session_id,
+            'sessionId': self.session_id,
             'User-Agent': self.USER_AGENT,
         }
 
@@ -122,7 +123,7 @@ class NalogRuPython:
         url = f'https://{self.HOST}/v2/tickets/{ticket_id}'
         headers = {
             'Host': self.HOST,
-            'sessionId': self.__session_id,
+            'sessionId': self.session_id,
             'Device-OS': self.DEVICE_OS,
             'clientVersion': self.CLIENT_VERSION,
             'Device-Id': self.DEVICE_ID,
