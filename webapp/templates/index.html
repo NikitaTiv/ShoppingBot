@@ -1,4 +1,3 @@
-<!doctype html>
 <html lang="ru">
     <head>
          <!-- Required meta tags -->
@@ -15,12 +14,12 @@
             <h1><u>Категории</u></h1>
             <div class="row">
                 <div class="col-12">
-                {% for category in categories %}
                 <form>
-                    <input type="checkbox" id={{loop.index}} name="vehicle1" value="Bike">
+                {% for category in categories %}
+                    <input type="checkbox" id={{loop.index}} name="{{ category }}" value="{{ category }}">
                     <label for={{loop.index}}>{{ category }}</label><br>
-                </form>
                 {% endfor %} 
+                </form>
                 </div>
                 <style type="text/css"> 
                     button[name="confirm"] { 
