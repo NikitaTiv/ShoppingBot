@@ -11,6 +11,7 @@ import settings
 from handlers import (
     greet_user, main_menu, operations_with_receipt,
     add_receipt, my_receipts, check_user_photo, cancel,
+    operation_phone_number, authorization_with_code,
 )
 
 logging.basicConfig(filename='bot.log',
@@ -47,6 +48,20 @@ def main() -> None:
                 MessageHandler(Filters.regex(
                     '^(Возврат в предыдущее меню ↩️)$',
                     ), operations_with_receipt),
+            ],
+            settings.PHONE_NUMBER: [
+                MessageHandler(Filters.regex(
+                    '^(Возврат в предыдущее меню ↩️)$',
+                    ), operations_with_receipt),
+                MessageHandler(Filters.text,
+                    operation_phone_number),
+            ],
+            settings.CODE: [
+                MessageHandler(Filters.regex(
+                    '^(Возврат в предыдущее меню ↩️)$',
+                    ), operations_with_receipt),
+                MessageHandler(Filters.text,
+                    authorization_with_code),
             ],
         },
         fallbacks=[CommandHandler('cancel', cancel)],
