@@ -8,10 +8,9 @@ def add_user(user_name: str) -> None:
     db_session.commit()
 
 
-def get_user_info(user_id: int) -> str|None:
+def get_user(user_id: int) -> str|None:
     if db_session.query(User.query.filter(User.id == user_id).exists()).scalar():
-        user = User.query.get(user_id)
-        return f'Имя пользоватя id №{user_id} - {user.name}'
+        return User.query.get(user_id)
     else:
         return None
 
@@ -34,11 +33,9 @@ def add_receipt(receipt_name: str, user_id: int) -> None:
     db_session.commit()
 
 
-def get_receipt_info(receipt_id: int) -> str|None:
+def get_receipt(receipt_id: int) -> str|None:
     if db_session.query(Receipt.query.filter(Receipt.id == receipt_id).exists()).scalar():
-        receipt = Receipt.query.get(receipt_id)
-        user = User.query.get(receipt.user_id)
-        return(f'Чек id №{receipt_id} с названием "{receipt.name}" загружен пользователем id №{receipt.user_id} по имени {user.name} {receipt.date_upload}')
+        return Receipt.query.get(receipt_id)
     else:
         return None
 
