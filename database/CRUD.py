@@ -1,6 +1,5 @@
 from db import db_session
 from models import User, Receipt, Good
-from typing import TypedDict
 
 
 def add_user(user_name: str) -> None:
@@ -71,68 +70,3 @@ def delete_receipt_content(content_id: int) -> None:
     content = Good.query.get(content_id)
     db_session.delete(content)
     db_session.commit()
-
-
-receipt_content = [
-    {
-        "name": "1*: 78032688 СПз Берлинер мал.нач/глазур",
-        "price": 144.99,
-        "quantity": 1,
-        "sum": 144.99
-    },
-    {
-        "name": "2*: 78032687 СПз Берлинер нач.вк.Ман/гл.",
-        "price": 144.99,
-        "quantity": 1,
-        "sum": 144.99
-    },
-    {
-        "name": "3: 3014975 КАРАТ Профитроли ванильные 24",
-        "price": 144.99,
-        "quantity": 1,
-        "sum": 144.99
-    },
-    {
-        "name": "4*: 4010834 OLEA Мыло URBAN жидкое 500мл",
-        "price": 144.99,
-        "quantity": 1,
-        "sum": 144.99
-    },
-    {
-        "name": "5*: 3965705 BUSH.Кофе SENSEI мол.227г",
-        "price": 144.99,
-        "quantity": 1,
-        "sum": 144.99
-    },
-    {
-        "name": "6: 3267348 АРНАУТ Ватруш.дом.твор.изюм20",
-        "price": 144.99,
-        "quantity": 1,
-        "sum": 144.99
-    },
-    {
-        "name": "7: 3257514 КАРАВ.Ватрушка Твор.наслаж.22",
-        "price": 144.99,
-        "quantity": 1,
-        "sum": 144.99
-    },
-    {
-        "name": "8: 4241068 ПАМП.Печ.БЕЛЛ.нач.вк.Йог/М.65",
-        "price": 144.99,
-        "quantity": 1,
-        "sum": 144.99
-    },
-    {
-        "name": "9*: 4088955 МАРК.ПЕР.Яйца кур.стол.С1 20",
-        "price": 144.99,
-        "quantity": 1,
-        "sum": 144.99
-    }
-]
-
-
-#if __name__ == "__main__":
-#     add_user("Игорь")
-#     add_receipt("NewYear2", 2)
-#     add_receipt_content(receipt_content, 2)
-#   print(get_receipt_content(47))
