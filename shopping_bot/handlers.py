@@ -93,7 +93,7 @@ def check_user_photo(update: Update, context: CallbackContext) -> int:
         os.makedirs('images', exist_ok=True)
         new_filename = os.path.join('images', f'check_{photo_file.file_id}.jpg')
         os.rename(file_name, new_filename)
-        context.user_data['file'] = new_filename
+        context.user_data['file_directory'] = new_filename
         update.message.reply_text('Пожалуйста введите номер'
                 '\nв формате +79ХХХХХХХХХ.')
 
@@ -110,18 +110,19 @@ def operation_phone_number(update: Update, context: CallbackContext) -> int:
     и сохраняет его в content.user_data, затем
     отправляет его в налоговую для получения кода.
     """
-    if len(update.message.text) == 12 and update.message.text[:2] == '+7' and update.message.text[1:].isdigit():
-        value = update.message.text
-        context.user_data['phone'] = value
-        update.message.reply_text('Телефон сохранен.')
-        phone = NalogRuPython(context.user_data.get('phone'))
-        phone.sends_sms_to_the_user()
-        update.message.reply_text('Пожалуйста введите код из SMS.')
-
-        return settings.CODE
-
-    else:
+    if len(update.message.text) != 12 or update.message.text[:2] != '+7' or not update.message.text[1:].isdigit():
         update.message.reply_text('Введите номер телефона в формате +79ХХХХХХХХХ.')
+
+        return settings.PHONE_NUMBER
+
+    value = update.message.text
+    context.user_data['phone'] = value
+    update.message.reply_text('Телефон сохранен.')
+    phone = NalogRuPython(context.user_data.get('phone'))
+    phone.sends_sms_to_the_user()
+    update.message.reply_text('Пожалуйста введите код из SMS.')
+    
+    return settings.CODE
 
 
 def authorization_with_code(update: Update, context: CallbackContext) -> None:
@@ -130,11 +131,14 @@ def authorization_with_code(update: Update, context: CallbackContext) -> None:
     """
     value = update.message.text
     phone = NalogRuPython(context.user_data.get('phone'), code=value)
-    phone.entering_code()
-    string_from_qr = read_qr_code(context.user_data.get('file'))
-    receipt = phone.get_ticket(string_from_qr)
-    phone.refresh_token_function()
-    treat_string_for_nalog(receipt)
+    server_response = phone.sends_code_to_nalog()
+    if server_response:
+        string_from_qr = read_qr_code(context.user_data.get('file_directory'))
+        receipt = phone.get_ticket(string_from_qr)
+        phone.refresh_token_function()
+        treat_string_for_nalog(receipt)
+    else:
+        update.message.reply_text('Введен неверный код. Пожалуйста введите код из SMS.')
 
 
 def my_receipts(update: Update, context) -> None:
