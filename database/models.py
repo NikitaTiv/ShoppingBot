@@ -15,7 +15,7 @@ class User(Base):
 class Receipt(Base):
     __tablename__ = 'receipt'
     id = Column(Integer, primary_key=True)
-    name = Column(String(255), unique=True, nullable=False)
+    name = Column(String(255), nullable=False)
     date_upload = Column(DateTime(timezone=True), server_default=func.now())
     user_id = Column(Integer, ForeignKey("user.id"), index=True)
     user = relationship("User")
