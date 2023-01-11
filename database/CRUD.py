@@ -1,11 +1,13 @@
 from db import db_session
 from models import User, Receipt, Good
+from receipt_data import get_receipt_data
 
 
-def add_user(user_name: str) -> None:
+def add_user(user_name: str) -> int:
     user = User(name=user_name)
     db_session.add(user)
     db_session.commit()
+    return user.id
 
 
 def get_user(user_id: int) -> str|None:
@@ -27,10 +29,11 @@ def delete_user(user_id: int) -> None:
     db_session.commit()
 
 
-def add_receipt(receipt_name: str, user_id: int) -> None:
+def add_receipt(receipt_name: str, user_id: int) -> int:
     receipt = Receipt(name=receipt_name, user_id=user_id)
     db_session.add(receipt)
     db_session.commit()
+    return receipt.id
 
 
 def get_receipt(receipt_id: int) -> str|None:
@@ -70,3 +73,8 @@ def delete_receipt_content(content_id: int) -> None:
     content = Good.query.get(content_id)
     db_session.delete(content)
     db_session.commit()
+
+if __name__ == "__main__":
+    last_user_id = add_user("Владислав")
+    last_receipt_id = add_receipt(get_receipt_data()["seller"], last_user_id)
+    add_receipt_content(get_receipt_data()["positions"], last_receipt_id)
