@@ -94,8 +94,7 @@ def check_user_photo(update: Update, context: CallbackContext) -> int:
         new_filename = os.path.join('images', f'check_{photo_file.file_id}.jpg')
         os.rename(file_name, new_filename)
         context.user_data['file_directory'] = new_filename
-        update.message.reply_text('Пожалуйста введите номер'
-                '\nв формате +79ХХХХХХХХХ.')
+        update.message.reply_text('Пожалуйста введите номер\nв формате +79ХХХХХХХХХ.')
 
         return settings.PHONE_NUMBER
 
@@ -115,8 +114,8 @@ def operation_phone_number(update: Update, context: CallbackContext) -> int:
 
         return settings.PHONE_NUMBER
 
-    value = update.message.text
-    context.user_data['phone'] = value
+    phone = update.message.text
+    context.user_data['phone'] = phone
     update.message.reply_text('Телефон сохранен.')
     phone = NalogRuPython(context.user_data.get('phone'))
     phone.sends_sms_to_the_user()
