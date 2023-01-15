@@ -14,12 +14,6 @@
             <h1><u>Категории</u></h1>
             <div class="row">
                 <div class="col-12">
-                <form>
-                {% for category in categories %}
-                    <input type="checkbox" id={{loop.index}} name="{{ category }}" value="{{ category }}">
-                    <label for={{loop.index}}>{{ category }}</label><br>
-                {% endfor %} 
-                </form>
                 </div>
                 <style type="text/css"> 
                     button[name="confirm"] { 
