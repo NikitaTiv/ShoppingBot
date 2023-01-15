@@ -11,28 +11,7 @@
     </head>
     <body>
         <div class="container">
-            <h1><u>Категории</u></h1>
-            <div class="row">
-                <div class="col-12">
-                <form>
-                {% for category in categories %}
-                    <input type="checkbox" id={{loop.index}} name="{{ category }}" value="{{ category }}">
-                    <label for={{loop.index}}>{{ category }}</label><br>
-                {% endfor %} 
-                </form>
-                </div>
-                <style type="text/css"> 
-                    button[name="confirm"] { 
-                      border: none;
-                      border-radius: 10px;
-                      padding: 5px 25px;
-                      background: #0466e6;
-                      font-weight: bold;
-                      color: white;
-                    }
-                  </style>
-                  <button type="button" name="confirm">Подтвердить</button>
-            </div>      
+        {% block content %}{% endblock %}
         </div>
         <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
