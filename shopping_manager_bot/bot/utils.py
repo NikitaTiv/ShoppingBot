@@ -1,6 +1,4 @@
-import os, sys
-sys.path.insert(1, os.path.join(sys.path[0], '..'))
-from settings.settings_file import USER_EMOJI
+from settings_box.settings import USER_EMOJI
 from emoji import emojize
 from random import choice, randint
 from telegram import ReplyKeyboardMarkup, KeyboardButton
@@ -10,7 +8,7 @@ def main_keyboard():
         [
             'Список покупок'
         ]
-    ])
+    ], resize_keyboard=True)
 
 
 def get_smile(user_data: dict) -> str:
@@ -18,14 +16,3 @@ def get_smile(user_data: dict) -> str:
         smile = choice(USER_EMOJI)
         return emojize(smile, language='alias')
     return user_data['emoji']
-
-
-def play_random_numbers(user_number: int) -> str:
-    bot_number = randint(user_number - 10, user_number + 10)
-    if user_number > bot_number:
-        message = f'Ваше число {user_number}, мое {bot_number}, Вы выиграли!'
-    elif user_number == bot_number:
-        message = f'Ваше число {user_number}, мое {bot_number}, Ничья!'
-    else:
-        message = f'Ваше число {user_number}, мое {bot_number}, Вы проиграли!'
-    return message

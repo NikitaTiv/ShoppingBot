@@ -4,11 +4,11 @@ from db.db import Base, engine
 class Good(Base):
     __tablename__ = 'good'
     id = Column(Integer, primary_key=True)
-    user_id = Column(String)
+    user_id = Column(Integer)
     good = Column(String, nullable=False)
 
     def __repr__(self):
         return f'id={self.id}: {self.good}'
 
-if __name__ == "__main__":
+def create_model():
     Base.metadata.create_all(bind=engine)

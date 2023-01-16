@@ -1,13 +1,11 @@
-import logging, os, sys
-sys.path.insert(1, os.path.join(sys.path[0], '..'))
-from settings.settings_file import API_KEY
+import logging
 from telegram.ext import CommandHandler, Updater, MessageHandler, Filters, ConversationHandler
-from dialog import dialog_start, dialog_add_good, dialog_fail, dialog_choose_state, dialog_delete_one_good
-from handlers import greet_user
+from bot.handlers import dialog_start, dialog_add_good, dialog_fail, dialog_choose_state, dialog_delete_one_good
+from bot.handlers import greet_user
 
 logging.basicConfig(filename='bot.log', level=logging.INFO)
 
-def main_function() -> None:
+def main_function(API_KEY: str) -> None:
     shopping_manager_bot = Updater(API_KEY, use_context=True)
     dp = shopping_manager_bot.dispatcher
     dialog_structure = ConversationHandler(
@@ -27,6 +25,3 @@ def main_function() -> None:
     dp.add_handler(CommandHandler('start', greet_user))
     shopping_manager_bot.start_polling()
     shopping_manager_bot.idle()
-
-if __name__ == "__main__":
-    main_function()
