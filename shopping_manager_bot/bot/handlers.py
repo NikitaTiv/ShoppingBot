@@ -12,7 +12,7 @@ def greet_user(update, context) -> None:
 
 
 def dialog_start(update, context):
-    reply_keyboard = [['Добавить товар', 'Показать список'], ['Удалить один товар', 'Удалить все товары'], ['Выход']]
+    reply_keyboard = [['Добавить товар', 'Показать список'], ['Удалить один товар', 'Удалить все товары'], ['Выход', 'Отправить сообщение (test)']]
     update.message.reply_text('Вы вошли в меню работы со списком покупок!\nВыберите пункт меню:', 
                                 reply_markup=ReplyKeyboardMarkup(reply_keyboard))
     return 'choose_state'
@@ -33,6 +33,9 @@ def dialog_choose_state(update, context):
     elif update.message.text == 'Выход':
         dialog_skip(update, context)
         happy_end(update, context)
+    elif update.message.text == 'Отправить сообщение (test)':
+        update.message.reply_text('Че отправим?')
+        return 'send_message_by_user_id'
     return ConversationHandler.END
 
 
@@ -43,6 +46,13 @@ def dialog_add_good(update, context):
         return 'add_good'
     add_one_good(update.message.from_user.id, good_name)
     update.message.reply_text('Товар добавлен в базу данных!', reply_markup=main_keyboard())
+    return ConversationHandler.END
+
+
+def send_message_by_user_id(update, context) -> None:
+    print(update.message.from_user["id"])
+    #context.bot.send_message(783186475, update.message.text, reply_markup=main_keyboard())
+    happy_end(update, context)
     return ConversationHandler.END
 
 
