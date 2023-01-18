@@ -1,12 +1,15 @@
-from bot.utils import main_keyboard, get_smile
+from bot.utils import main_keyboard
+from emoji import emojize
+from random import choice
 from db.CRUD import add_one_good, get_all_goods, delete_all_goods, delete_one_good
 from telegram import ReplyKeyboardMarkup
 from telegram.ext import ConversationHandler
+from configure.config import USER_EMOJI
+
 
 def greet_user(update, context) -> None:
-    context.user_data['emoji'] = get_smile(context.user_data)
     update.message.reply_text(
-        f'Привет, {update.message.from_user["first_name"]}, Я помогу тебе с покупками! {context.user_data["emoji"]}',
+        f'Привет, {update.message.from_user["first_name"]}, Я помогу тебе с покупками! {emojize(choice(USER_EMOJI), language="alias")}',
         reply_markup=main_keyboard()
     )
 
@@ -51,7 +54,7 @@ def dialog_add_good(update, context):
 
 def send_message_by_user_id(update, context) -> None:
     print(update.message.from_user["id"])
-    #context.bot.send_message(783186475, update.message.text, reply_markup=main_keyboard())
+    #context.bot.send_message(783186475, update.message.text, reply_markup=main_keyboard())  - на данный момент это тестовая функция, удалять не буду при пуше :)
     happy_end(update, context)
     return ConversationHandler.END
 

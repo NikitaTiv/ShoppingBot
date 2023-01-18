@@ -1,6 +1,7 @@
 from sqlalchemy import Column, Integer, String
 from db.db import Base, engine
 
+
 class Good(Base):
     __tablename__ = 'good'
     id = Column(Integer, primary_key=True)
@@ -9,6 +10,7 @@ class Good(Base):
 
     def __repr__(self):
         return f'id={self.id}: {self.good}'
+
 
 def create_model():
     Base.metadata.create_all(bind=engine)

@@ -3,7 +3,9 @@ from telegram.ext import CommandHandler, Updater, MessageHandler, Filters, Conve
 from bot.handlers import dialog_start, dialog_add_good, dialog_fail, dialog_choose_state, dialog_delete_one_good, send_message_by_user_id
 from bot.handlers import greet_user
 
+
 logging.basicConfig(filename='bot.log', level=logging.INFO)
+
 
 def main_function(API_KEY: str) -> None:
     shopping_manager_bot = Updater(API_KEY, use_context=True)
