@@ -53,8 +53,7 @@ def dialog_add_good(update, context):
 
 
 def send_message_by_user_id(update, context) -> None:
-    print(update.message.from_user["id"])
-    #context.bot.send_message(783186475, update.message.text, reply_markup=main_keyboard())  - на данный момент это тестовая функция, удалять не буду при пуше :)
+    #context.bot.send_message(783186475, update.message.text, reply_markup=main_keyboard())
     happy_end(update, context)
     return ConversationHandler.END
 
