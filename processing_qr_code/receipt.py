@@ -1,5 +1,4 @@
-from API_FNS.nalog_ru import NalogRuPython
-import json
+from processing_qr_code.API_FNS.nalog_ru import NalogRuPython
 from typing import Any
 
 
@@ -14,7 +13,8 @@ def treat_receipt(data: dict[str, Any]) -> dict[str, Any]:
     }
     for head_receipt in data:
         if head_receipt in select_data_receipt:
-            data_receipt[f'{head_receipt}'] = select_data_receipt[f'{head_receipt}']
+            data_receipt[f'{head_receipt}'] = \
+                         select_data_receipt[f'{head_receipt}']
         elif head_receipt == 'ticket':
             data_receipt['positions'] = treat_products(data_products)
     return data_receipt
@@ -40,5 +40,3 @@ if __name__ == '__main__':
     receipt = client.get_ticket(qr_code)
     client.refresh_token_function()
     processed_receipt = treat_receipt(receipt)
-    with open('verified_receipt.json', 'w', encoding='utf-8') as w_file:
-        w_file.write(json.dumps(processed_receipt, indent=4, ensure_ascii=False))
