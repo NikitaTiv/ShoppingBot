@@ -1,27 +1,23 @@
-from utils import json_func
-from typing import Any
+from database_with_categories.db import db_session
+from database_with_categories.models import CategoryTriggers
+from database_with_categories.CRUD import get_category
+from typing import Optional
 
 
-def define_category(categories_corpus: dict, good: dict) -> str | None:
+def define_category(good: dict) -> list[int, str]:
     result_category = None
-    good_without_separator = good["name"].replace(".", " ").replace(",", " ").replace("/", " ")
+    good_without_separator = \
+        good['name'].replace('.', ' ').replace(',', ' ').replace('/', ' ')
     good_as_list = good_without_separator.lower().split()
-    for category_name, category_words in categories_corpus.items(): 
-        category_set = set(category_words)
-        if category_set.intersection(good_as_list):
-            result_category = category_name
+    for category_words in db_session.query(CategoryTriggers.name):     
+        if category_words[0] in good_as_list:
+            result_category = get_category(category_words[0])
             break
     return result_category
 
 
-def add_categories_to_receipt(categories_corpus: dict, receipt: dict) -> dict:
-    for good in receipt["positions"]:
-        good["category"] = define_category(categories_corpus, good)
+def add_categories_to_receipt(receipt: dict) -> dict:
+    for good in receipt['positions']:
+        good['category_id'] = define_category(good)[0]
+        good['category_name'] = define_category(good)[1]
     return receipt
-
-
-if __name__ == "__main__":
-    categories = json_func.read("categories.json")
-    input_receipt = json_func.read("verified_receipt.json")
-    receipt_with_categories = add_categories_to_receipt(categories, input_receipt)
-    json_func.write("verified_receipt_with_categories.json", receipt_with_categories)
